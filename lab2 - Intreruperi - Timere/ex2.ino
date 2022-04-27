@@ -1,73 +1,292 @@
-#define LED 11 
-#define BUTTON 2
-#define LED_R 11
-#define LED_G 10
-#define LED_B 9
+/* 
+  Hedwig's theme - Harry Potter 
+  Connect a piezo buzzer or speaker to pin 11 or select a new pin.
+  More songs available at https://github.com/robsoncouto/arduino-songs                                            
+                                              
+                                              Robson Couto, 2019
+*/
+
+#define NOTE_B0  31
+#define NOTE_C1  33
+#define NOTE_CS1 35
+#define NOTE_D1  37
+#define NOTE_DS1 39
+#define NOTE_E1  41
+#define NOTE_F1  44
+#define NOTE_FS1 46
+#define NOTE_G1  49
+#define NOTE_GS1 52
+#define NOTE_A1  55
+#define NOTE_AS1 58
+#define NOTE_B1  62
+#define NOTE_C2  65
+#define NOTE_CS2 69
+#define NOTE_D2  73
+#define NOTE_DS2 78
+#define NOTE_E2  82
+#define NOTE_F2  87
+#define NOTE_FS2 93
+#define NOTE_G2  98
+#define NOTE_GS2 104
+#define NOTE_A2  110
+#define NOTE_AS2 117
+#define NOTE_B2  123
+#define NOTE_C3  131
+#define NOTE_CS3 139
+#define NOTE_D3  147
+#define NOTE_DS3 156
+#define NOTE_E3  165
+#define NOTE_F3  175
+#define NOTE_FS3 185
+#define NOTE_G3  196
+#define NOTE_GS3 208
+#define NOTE_A3  220
+#define NOTE_AS3 233
+#define NOTE_B3  247
+#define NOTE_C4  262
+#define NOTE_CS4 277
+#define NOTE_D4  294
+#define NOTE_DS4 311
+#define NOTE_E4  330
+#define NOTE_F4  349
+#define NOTE_FS4 370
+#define NOTE_G4  392
+#define NOTE_GS4 415
+#define NOTE_A4  440
+#define NOTE_AS4 466
+#define NOTE_B4  494
+#define NOTE_C5  523
+#define NOTE_CS5 554
+#define NOTE_D5  587
+#define NOTE_DS5 622
+#define NOTE_E5  659
+#define NOTE_F5  698
+#define NOTE_FS5 740
+#define NOTE_G5  784
+#define NOTE_GS5 831
+#define NOTE_A5  880
+#define NOTE_AS5 932
+#define NOTE_B5  988
+#define NOTE_C6  1047
+#define NOTE_CS6 1109
+#define NOTE_D6  1175
+#define NOTE_DS6 1245
+#define NOTE_E6  1319
+#define NOTE_F6  1397
+#define NOTE_FS6 1480
+#define NOTE_G6  1568
+#define NOTE_GS6 1661
+#define NOTE_A6  1760
+#define NOTE_AS6 1865
+#define NOTE_B6  1976
+#define NOTE_C7  2093
+#define NOTE_CS7 2217
+#define NOTE_D7  2349
+#define NOTE_DS7 2489
+#define NOTE_E7  2637
+#define NOTE_F7  2794
+#define NOTE_FS7 2960
+#define NOTE_G7  3136
+#define NOTE_GS7 3322
+#define NOTE_A7  3520
+#define NOTE_AS7 3729
+#define NOTE_B7  3951
+#define NOTE_C8  4186
+#define NOTE_CS8 4435
+#define NOTE_D8  4699
+#define NOTE_DS8 4978
+#define REST 0
+unsigned const int a = 11;
+unsigned const int b = 10;
+unsigned const int c = 7;
+unsigned const int d = 8;
+unsigned const int e = 9;
+unsigned const int f = 12;
+unsigned const int g = 13;
+unsigned const int dp = 6;
+unsigned const int Button = 3;
+unsigned const int LED = 5;
+int thisNote = 0;
+int isPlaying = 1;
+int i = 9;
+
+void isr_btn() {
+  isPlaying = 1 - isPlaying;
+  
+  digitalWrite(LED, HIGH);
+}
+
+// change this to make the song slower or faster
+int tempo = 144;
+
+// change this to whichever pin you want to use
+int buzzer = 2;
+
+// notes of the moledy followed by the duration.
+// a 4 means a quarter note, 8 an eighteenth , 16 sixteenth, so on
+// !!negative numbers are used to represent dotted notes,
+// so -4 means a dotted quarter note, that is, a quarter plus an eighteenth!!
+int melody[] = {
+
+
+  // Hedwig's theme fromn the Harry Potter Movies
+  // Socre from https://musescore.com/user/3811306/scores/4906610
+  
+  REST, 2, NOTE_D4, 4,
+  NOTE_G4, -4, NOTE_AS4, 8, NOTE_A4, 4,
+  NOTE_G4, 2, NOTE_D5, 4,
+  NOTE_C5, -2, 
+  NOTE_A4, -2,
+  NOTE_G4, -4, NOTE_AS4, 8, NOTE_A4, 4,
+  NOTE_F4, 2, NOTE_GS4, 4,
+  NOTE_D4, -1, 
+  NOTE_D4, 4,
+
+  NOTE_G4, -4, NOTE_AS4, 8, NOTE_A4, 4, //10
+  NOTE_G4, 2, NOTE_D5, 4,
+  NOTE_F5, 2, NOTE_E5, 4,
+  NOTE_DS5, 2, NOTE_B4, 4,
+  NOTE_DS5, -4, NOTE_D5, 8, NOTE_CS5, 4,
+  NOTE_CS4, 2, NOTE_B4, 4,
+  NOTE_G4, -1,
+  NOTE_AS4, 4,
+     
+  NOTE_D5, 2, NOTE_AS4, 4,//18
+  NOTE_D5, 2, NOTE_AS4, 4,
+  NOTE_DS5, 2, NOTE_D5, 4,
+  NOTE_CS5, 2, NOTE_A4, 4,
+  NOTE_AS4, -4, NOTE_D5, 8, NOTE_CS5, 4,
+  NOTE_CS4, 2, NOTE_D4, 4,
+  NOTE_D5, -1, 
+  REST,4, NOTE_AS4,4,  
+
+  NOTE_D5, 2, NOTE_AS4, 4,//26
+  NOTE_D5, 2, NOTE_AS4, 4,
+  NOTE_F5, 2, NOTE_E5, 4,
+  NOTE_DS5, 2, NOTE_B4, 4,
+  NOTE_DS5, -4, NOTE_D5, 8, NOTE_CS5, 4,
+  NOTE_CS4, 2, NOTE_AS4, 4,
+  NOTE_G4, -1, 
+  
+};
+
+// sizeof gives the number of bytes, each int value is composed of two bytes (16 bits)
+// there are two values per note (pitch and duration), so for each note there are four bytes
+int notes = sizeof(melody) / sizeof(melody[0]) / 2;
+
+// this calculates the duration of a whole note in ms (60s/tempo)*4 beats
+int wholenote = (60000 * 4) / tempo;
+
+int divider = 0, noteDuration = 0;
 
 void setup() {
+  pinMode(Button, INPUT_PULLUP);
+
   pinMode(LED, OUTPUT);
-//  pinMode(LED_R, OUTPUT);
-//  pinMode(LED_G, OUTPUT);
-//  pinMode(LED_B, OUTPUT);
-  pinMode(BUTTON, INPUT_PULLUP);
-  EICRA |= (1 << ISC01);
-  EIMSK |= (1 << INT0);
+  digitalWrite(LED, LOW);
+  pinMode(a, OUTPUT);  //A
+  pinMode(b, OUTPUT);  //B
+  pinMode(c, OUTPUT);  //C
+  pinMode(d, OUTPUT);  //D
+  pinMode(e, OUTPUT);  //E
+  pinMode(f, OUTPUT);  //F
+  pinMode(g, OUTPUT);  //G
+  cli();
+
+  TCCR1A = 0;
+  TCCR1B = 0;
+  TCNT1  = 0;
+
+  OCR1A = 31249;            // compare match register 16MHz/256/2Hz-1
+  TCCR1B |= (1 << WGM12);   // CTC mode
+  TCCR1B |= (1 << CS12) | (1 << CS10);    // 256 prescaler
+  TIMSK1 |= (1 << OCIE1A);  // enable timer compare interrupt
   sei();
-  
-  Serial.begin(9600);
-  Serial.println("astept comenzi");
-  setColourRgb(0,0,0);
+  attachInterrupt(digitalPinToInterrupt(Button), isr_btn, FALLING);
 }
- 
-char buf[20];
-int i = 0;
-long ts = 0;
-bool blink_state = false;
-int r = 255, g = 0, b = 120;
 
-ISR(INT0_vect)
+void turnOff()
 {
-  // cod întrerupere externă PD2 /INT0
-  // verificare tranziție pe front crescător, descrescător sau oricare
-  // (după cum este configurat INT0)
-  int res = digitalRead(LED);
-  if (millis() - ts > 300) {
-    if (res == 0) 
-      digitalWrite(LED, HIGH);
-    else
-      digitalWrite(LED, LOW);
-    ts = millis();
-  }
-  
-  
+  digitalWrite(a, HIGH);
+  digitalWrite(b, HIGH);
+  digitalWrite(c, HIGH);
+  digitalWrite(d, HIGH);
+  digitalWrite(e, HIGH);
+  digitalWrite(f, HIGH);
+  digitalWrite(g, HIGH);
 }
- 
+
+void displayDigit(int digit)
+{
+  if (digit != 0 && digit != 1 && digit != 7)
+    digitalWrite(g, LOW);
+
+  //Conditions for displaying segment a
+  if (digit != 1 && digit != 4)
+    digitalWrite(a, LOW);
+
+  //Conditions for displaying segment b
+  if (digit != 5 && digit != 6)
+    digitalWrite(b, LOW);
+
+  //Conditions for displaying segment c
+  if (digit != 2)
+    digitalWrite(c, LOW);
+
+  //Conditions for displaying segment d
+  if (digit != 1 && digit != 4 && digit != 7)
+    digitalWrite(d, LOW);
+
+  //Conditions for displaying segment e
+  if (digit == 2 || digit == 6 || digit == 8 || digit == 0)
+    digitalWrite(e, LOW);
+
+  //Conditions for displaying segment f
+  if (digit != 1 && digit != 2 && digit != 3 && digit != 7)
+    digitalWrite(f, LOW);
+}
+
+
+ISR(TIMER1_COMPA_vect) {
+  turnOff();
+  i--;
+  displayDigit(i);
+  if (i == 0) {
+    i = 9;
+  }
+}
+  
+
 void loop() {
-  unsigned int rgbColour[3];
-
-  // Start off with red.
-  rgbColour[0] = 255;
-  rgbColour[1] = 0;
-  rgbColour[2] = 0;  
-
-  // Choose the colours to increment and decrement.
-  for (int decColour = 0; decColour < 3; decColour += 1) {
-    int incColour = decColour == 2 ? 0 : decColour + 1;
-    int thirdColour = incColour == 2 ? 0 : incColour + 1;
-    // cross-fade the two colours.
-    for(int i = 0; i < 255; i += 1) {
-      rgbColour[decColour] -= 1;
-      rgbColour[incColour] += 1;
-      rgbColour[thirdColour] += 1;
-      
-      setColourRgb(rgbColour[0], rgbColour[1], rgbColour[2]);
-      delay(5);
+    // iterate over the notes of the melody. 
+  // Remember, the array is twice the number of notes (notes + durations)
+  if (isPlaying == 0)
+    return;
+    
+  if (thisNote >= notes * 2)
+    thisNote = 0;
+  
+  for (; thisNote < notes * 2; thisNote = thisNote + 2) {
+    if (isPlaying == 0)
+      return;
+    // calculates the duration of each note
+    divider = melody[thisNote + 1];
+    if (divider > 0) {
+      // regular note, just proceed
+      noteDuration = (wholenote) / divider;
+    } else if (divider < 0) {
+      // dotted notes are represented with negative durations!!
+      noteDuration = (wholenote) / abs(divider);
+      noteDuration *= 1.5; // increases the duration in half for dotted notes
     }
+
+    // we only play the note for 90% of the duration, leaving 10% as a pause
+    tone(buzzer, melody[thisNote], noteDuration*0.9);
+
+    // Wait for the specief duration before playing the next note.
+    delay(noteDuration / ((i + 1) / 3));
+    
+    // stop the waveform generation before the next note.
+    noTone(buzzer);
   }
 }
-
-void setColourRgb(unsigned int red, unsigned int green, unsigned int blue) {
-  analogWrite(LED_R, red);
-  analogWrite(LED_G, green);
-  analogWrite(LED_B, blue);
- }
